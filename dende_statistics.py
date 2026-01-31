@@ -9,16 +9,34 @@ class Statistics:
         são os nomes das colunas e os valores são listas com os dados.
     """
     def __init__(self, dataset):
-        """
-        Inicializa o objeto Statistics.
 
-        Parâmetros
-        ----------
-        dataset : dict[str, list]
-            O conjunto de dados, onde as chaves representam os nomes das
-            colunas e os valores são as listas de dados correspondentes.
-        """
+        # Verificando se é um dicionario
+        if not isinstance(dataset, dict):
+         raise ValueError("ERRO: O dataset não é um dicionário.") 
+
         self.dataset = dataset
+        self.colunas = list(dataset.keys())
+
+        # Verificando se o dataset está vazio
+        if not self.colunas:
+            
+            return
+    
+        # Verificando o tamanho da lista
+        tamanho_esperado = len(dataset[self.colunas[0]])
+
+        # Verificando se as colunas tem tamanhos diferentes
+        for coluna in self.colunas:
+            if len(dataset[coluna]) != tamanho_esperado:
+                raise ValueError(f"ERRO: A coluna '{coluna}' tem um tamanho diferente das outras.")
+
+        # Verificando se o tipo das colunas estão diferentes
+            if len(dataset[coluna]) > 0:
+                tipo_primeiro = type(dataset[coluna][0])
+                for item in dataset[coluna]:
+                    if type(item) != tipo_primeiro:
+                        raise ValueError(f"ERRO: A coluna '{coluna}' tem diferentes tipos de dados.")
+    
 
     def mean(self, column):
         """
