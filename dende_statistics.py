@@ -39,19 +39,23 @@ class Statistics:
     
 
     def mean(self, column):
-        """
-        Calcula a média aritmética de uma coluna.
+        
+        # Pegando os dados dentro do dataset
+        dados = self.dataset[column]
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        # Verificando se os dados são números
+        if not isinstance(dados[0], (int, float)):
+            raise ValueError(f"ERRO: A coluna '{column}' não é numérica.")
+        
+        soma_total = 0
+        quantidade_elementos = 0
 
-        Retorno
-        -------
-        float
-            A média dos valores na coluna.
-        """
+        for valor in dados:
+            soma_total += valor
+            quantidade_elementos += 1
+
+        return soma_total / quantidade_elementos
+
         pass
 
     def median(self, column):
