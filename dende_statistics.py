@@ -59,21 +59,25 @@ class Statistics:
         pass
 
     def median(self, column):
-        """
-        Calcula a mediana de uma coluna.
 
-        A mediana é o valor central de um conjunto de dados ordenado.
+        dados = self.dataset[column]
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        if not isinstance(dados[0], (int, float)):
+            raise ValueError(f"ERRO: A coluna '{column}' não é numérica.")
+        
+        dados_ordenados = sorted(dados)
+        n = len(dados_ordenados)
+        meio = n // 2
+    
+        if n % 2 != 0:
+            resultado = dados_ordenados[meio]
+        else:
+            valor_1 = dados_ordenados[meio - 1]
+            valor_2 = dados_ordenados[meio]
+            resultado = (valor_1 + valor_2) / 2
+            
+        return resultado
 
-        Retorno
-        -------
-        float
-            O valor da mediana da coluna.
-        """
         pass
 
     def mode(self, column):
