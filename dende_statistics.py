@@ -153,22 +153,26 @@ class Statistics:
     pass
 
     def covariance(self, column_a, column_b):
-        """
-        Calcula a covariância entre duas colunas.
 
-        Parâmetros
-        ----------
-        column_a : str
-            O nome da primeira coluna (X).
-        column_b : str
-            O nome da segunda coluna (Y).
+        # Capturando os dados das colunas que serão comparadas
+        dados_x = self.dataset[column_a]
+        dados_y = self.dataset[column_b]
+        n = len(dados_x)
 
-        Retorno
-        -------
-        float
-            O valor da covariância entre as duas colunas.
-        """
-        pass
+        # Raproveitando metodo mean utilizado anteriormente, e extraindo a média em cada coluna
+        media_x = self.mean(column_a)
+        media_y = self.mean(column_b)
+
+        # Criando a variável para realizar a fórmula da covariância
+        soma_produtos = 0
+
+        # Criando a fórmula da covariância (Somatório)
+        for i in range(n):
+            soma_produtos += (dados_x[i] - media_x) * (dados_y[i] - media_y)
+        # Segunda parte da fórmula (divide o somatório pela quantidade de elementos)
+        return soma_produtos / n
+
+    pass
 
     def itemset(self, column):
         """
