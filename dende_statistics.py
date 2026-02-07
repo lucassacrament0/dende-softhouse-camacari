@@ -60,25 +60,33 @@ class Statistics:
 
     def median(self, column):
 
-        dados = self.dataset[column]
+            dados = self.dataset[column]
+            # Criando valores baseados nos dados da coluna "priority"
+            if column == "priority":
+                ordem = {"baixa": 0, "media": 1, "alta": 2}
 
-        if not isinstance(dados[0], (int, float)):
-            raise ValueError(f"ERRO: A coluna '{column}' não é numérica.")
-        
-        dados_ordenados = sorted(dados)
-        n = len(dados_ordenados)
-        meio = n // 2
-    
-        if n % 2 != 0:
-            resultado = dados_ordenados[meio]
-        else:
-            valor_1 = dados_ordenados[meio - 1]
-            valor_2 = dados_ordenados[meio]
-            resultado = (valor_1 + valor_2) / 2
-            
-        return resultado
+                # Ordenando os valores e validando se está corretamente numérica e com ordem
+                dados_ordenados = sorted(dados, key=lambda x: ordem[x])
+            else:
+                try:
+                    dados_ordenados = sorted(dados)
+                except TypeError:
+                    raise ValueError(f"ERRO: A coluna '{column}' não é numérica e não tem ordem definida.")
 
-        pass
+            # Fórmula da Mediana
+            n = len(dados_ordenados)
+            meio = n // 2
+
+            if n % 2 != 0:
+                return dados_ordenados[meio]
+            else:
+
+                if isinstance(dados_ordenados[meio], (int, float)):
+                    return (dados_ordenados[meio - 1] + dados_ordenados[meio]) / 2
+                else:
+                    return dados_ordenados[meio - 1]
+
+            pass
 
     def mode(self, column):
 
