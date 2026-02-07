@@ -54,9 +54,11 @@ class Statistics:
             soma_total += valor
             quantidade_elementos += 1
 
-        return soma_total / quantidade_elementos
+        media = soma_total / quantidade_elementos
 
-        pass
+        return media
+
+    pass
 
     def median(self, column):
 
@@ -86,7 +88,7 @@ class Statistics:
                 else:
                     return dados_ordenados[meio - 1]
 
-                    pass
+    pass
 
     def mode(self, column):
 
@@ -118,40 +120,37 @@ class Statistics:
         # Retorna a Moda
         return sorted(modas)
 
-        pass
-
+    pass
 
     def variance(self, column):
-        """
-        Calcula a variância populacional de uma coluna.
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        dados = self.dataset[column]
 
-        Retorno
-        -------
-        float
-            A variância dos valores na coluna.
-        """
-        pass
+        # Reuso da media
+        media_valores = self.mean(column)
+
+        # Cálculo da soma das diferenças ao quadrado
+        soma_varianca = 0
+        for valor in dados:
+            diferenca = valor - media_valores
+            soma_varianca += diferenca ** 2
+
+        # Divisão pelo total de elementos
+        return soma_varianca / len(dados)
+
+    pass
 
     def stdev(self, column):
-        """
-        Calcula o desvio padrão populacional de uma coluna.
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        # Reuso da variância
+        valor_variancia = self.variance(column)
 
-        Retorno
-        -------
-        float
-            O desvio padrão dos valores na coluna.
-        """
-        pass
+        # Cálculo da raiz quadrada
+        resultado = valor_variancia ** 0.5
+
+        return resultado
+
+    pass
 
     def covariance(self, column_a, column_b):
         """
