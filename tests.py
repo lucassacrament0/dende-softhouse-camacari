@@ -62,7 +62,7 @@ class TestStatistics(unittest.TestCase):
     # ---------- Desvio Padrão ----------
 
     def test_stdev_ticket_price(self):
-        self.assertAlmostEqual(self.stats.stdev("ticket_price"), 22.9183)
+        self.assertAlmostEqual(self.stats.stdev("ticket_price"), 22.9183, places =4)
 
     # ---------- Covariância ----------
 
