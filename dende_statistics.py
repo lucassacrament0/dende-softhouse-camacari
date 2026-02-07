@@ -86,7 +86,7 @@ class Statistics:
                 else:
                     return dados_ordenados[meio - 1]
 
-            pass
+                    pass
 
     def mode(self, column):
 
@@ -95,23 +95,31 @@ class Statistics:
         # Criando um dicionário para contar ocorrências
         contagem = {}
 
+        # Criando fórmula de contagem, os itens serão associados à quantidade de vezes em que aparecem,
+        # assumindo um valor
+
         for item in dados:
             if item in contagem:
                 contagem[item] += 1
             else:
                 contagem[item] = 1
 
-        max_frequencia = 0
-        for valor in contagem.values():
-            if valor > max_frequencia:
-                max_frequencia = valor
-        
+        # Max retorna o maior valor entre os itens contados anteriormente
+        max_frequencia = max(contagem.values())
+
+
+        # Criando fórmula de Moda, verifica o valor adquirido por cada item e compara com o maior registrado no 'max',
+        # O item que for igual ao 'max', será considerado o contado mais vezes, ou seja, a Moda
         modas = []
-        for chave, valor in contagem.items():
-            if valor == max_frequencia:
-                modas.append(chave)
+        for item in contagem:
+            if contagem[item] == max_frequencia:
+                modas.append(item)
+
+        # Retorna a Moda
+        return sorted(modas)
 
         pass
+
 
     def variance(self, column):
         """
