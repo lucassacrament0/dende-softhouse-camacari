@@ -186,21 +186,22 @@ class Statistics:
     pass
 
     def absolute_frequency(self, column):
-        """
-        Calcula a frequência absoluta de cada item em uma coluna.
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        dados = self.dataset[column]
 
-        Retorno
-        -------
-        dict
-            Um dicionário onde as chaves são os itens e os valores são
-            suas contagens (frequência absoluta).
-        """
-        pass
+        # Dicionário para contar ocorrências
+        frequencias = {}
+
+        # Definindo contagem para associar itens a suas frequencias
+        for item in dados:
+            if item in frequencias:
+                frequencias[item] += 1
+            else:
+                frequencias[item] = 1
+
+        return frequencias
+    
+    pass
 
     def relative_frequency(self, column):
         """
