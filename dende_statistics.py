@@ -175,20 +175,15 @@ class Statistics:
     pass
 
     def itemset(self, column):
-        """
-        Retorna o conjunto de itens únicos em uma coluna.
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        dados = self.dataset[column]
 
-        Retorno
-        -------
-        set
-            Um conjunto com os valores únicos da coluna.
-        """
-        pass
+        # Uso de set para selecionar itens únicos
+        itens_unicos = set(dados)
+
+        return itens_unicos
+
+    pass
 
     def absolute_frequency(self, column):
         """
