@@ -204,21 +204,22 @@ class Statistics:
     pass
 
     def relative_frequency(self, column):
-        """
-        Calcula a frequência relativa de cada item em uma coluna.
+        # Raproveitando metodo absolute_frequency utilizado anteriormente
+        contagens = self.absolute_frequency(column)
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        # Pega o total de linhas na coluna
+        total_elementos = len(self.dataset[column])
 
-        Retorno
-        -------
-        dict
-            Um dicionário onde as chaves são os itens e os valores são
-            suas proporções (frequência relativa).
-        """
-        pass
+        # Dicionário para as proporções
+        frequencias_relativas = {}
+
+        # Calculando a proporção para cada item
+        for item, contagem in contagens.items():
+            frequencias_relativas[item] = contagem / total_elementos
+
+        return frequencias_relativas
+
+    pass
 
     def cumulative_frequency(self, column, frequency_method='absolute'):
         """

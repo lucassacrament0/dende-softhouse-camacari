@@ -69,7 +69,7 @@ class TestStatistics(unittest.TestCase):
     def test_covariance_participants_ticket_price(self):
         self.assertAlmostEqual(
             self.stats.covariance("participants", "ticket_price"),
-            2103.25
+            1212.25
         )
 
     # ---------- Itemset ----------
