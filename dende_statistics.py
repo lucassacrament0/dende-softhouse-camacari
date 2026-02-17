@@ -1,13 +1,5 @@
 class Statistics:
-    """
-    Uma classe para realizar cálculos estatísticos em um conjunto de dados.
 
-    Atributos
-    ----------
-    dataset : dict[str, list]
-        O conjunto de dados, estruturado como um dicionário onde as chaves
-        são os nomes das colunas e os valores são listas com os dados.
-    """
     def __init__(self, dataset):
 
         # Verificando se é um dicionario
@@ -58,7 +50,6 @@ class Statistics:
 
         return media
 
-    pass
 
     def median(self, column):
 
@@ -88,7 +79,6 @@ class Statistics:
                 else:
                     return dados_ordenados[meio - 1]
 
-    pass
 
     def mode(self, column):
 
@@ -120,7 +110,6 @@ class Statistics:
         # Retorna a Moda
         return sorted(modas)
 
-    pass
 
     def variance(self, column):
 
@@ -138,7 +127,6 @@ class Statistics:
         # Divisão pelo total de elementos
         return soma_varianca / len(dados)
 
-    pass
 
     def stdev(self, column):
 
@@ -150,7 +138,6 @@ class Statistics:
 
         return resultado
 
-    pass
 
     def covariance(self, column_a, column_b):
 
@@ -172,7 +159,6 @@ class Statistics:
         # Segunda parte da fórmula (divide o somatório pela quantidade de elementos)
         return soma_produtos / n
 
-    pass
 
     def itemset(self, column):
 
@@ -183,7 +169,6 @@ class Statistics:
 
         return itens_unicos
 
-    pass
 
     def absolute_frequency(self, column):
 
@@ -200,11 +185,10 @@ class Statistics:
                 frequencias[item] = 1
 
         return frequencias
-    
-    pass
+
 
     def relative_frequency(self, column):
-        # Raproveitando metodo absolute_frequency utilizado anteriormente
+        # Reaproveitando metodo absolute_frequency utilizado anteriormente
         contagens = self.absolute_frequency(column)
 
         # Pega o total de linhas na coluna
@@ -219,87 +203,134 @@ class Statistics:
 
         return frequencias_relativas
 
-    pass
 
     def cumulative_frequency(self, column, frequency_method='absolute'):
-        """
-        Calcula a frequência acumulada (absoluta ou relativa) de uma coluna.
+        # Reaproveitando metodo absolute_frequency e relative_frequency utilizado anteriormente
+        # Escolhe se usa a contagem numeral ou percentual
+        if frequency_method == 'relative':
+            frequencia_base = self.relative_frequency(column)
+        else:
+            frequencia_base = self.absolute_frequency(column)
 
-        A frequência é calculada sobre os itens ordenados.
+        # Pega as chaves do dicionário
+        categorias = list(frequencia_base.keys())
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
-        frequency_method : str, opcional
-            O método a ser usado: 'absolute' para contagem acumulada ou
-            'relative' para proporção acumulada (padrão é 'absolute').
+        # Mesma lógica da Mediana
+        if column == "priority":
+            ordem_customizada = {"baixa": 0, "media": 1, "alta": 2}
+            categorias_ordenadas = sorted(categorias, key=lambda x: ordem_customizada.get(x, 0))
+        else:
+            categorias_ordenadas = sorted(categorias)
 
-        Retorno
-        -------
-        dict
-            Um dicionário ordenado com os itens como chaves e suas
-            frequências acumuladas como valores.
-        """
-        pass
+        # Lógica da Acumulação
+        acumulada = {}
+        soma_progressiva = 0
+
+        for item in categorias_ordenadas:
+            soma_progressiva += frequencia_base[item]
+            acumulada[item] = soma_progressiva
+
+        return acumulada
+
 
     def conditional_probability(self, column, value1, value2):
-        """
-        Calcula a probabilidade condicional P(X_i = value1 | X_{i-1} = value2).
 
-        Este método trata a coluna como uma sequência e calcula a probabilidade
-        de encontrar `value1` imediatamente após `value2`.
+        dados = self.dataset[column]
+        n = len(dados)
 
-        Fórmula: P(A|B) = Contagem de sequências (B, A) / Contagem total de B
+        # Fórmula: P(A|B) = Contagem de sequências (B, A) / Contagem total de B
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
-        value1 : any
-            O valor do evento consequente (A).
-        value2 : any
-            O valor do evento condicionante (B).
+        contagem_b = 0
+        contagem_ab = 0
 
-        Retorno
-        -------
-        float
-            A probabilidade condicional, um valor entre 0 e 1.
-        """
-        pass
+
+        # O último item não tem ninguém depois dele, então não gera uma sequência
+        # Por isso percorre a lista até o penúltimo item
+        for i in range(n - 1):
+            # Se encontramos o valor condicionante (B)
+            if dados[i] == value2:
+                contagem_b += 1
+                # Verificamos se o próximo item é o valor consequente (A)
+                if dados[i + 1] == value1:
+                    contagem_ab += 1
+
+        # Evita divisão por zero
+        if contagem_b == 0:
+            return 0.0
+
+        return contagem_ab / contagem_b
+
 
     def quartiles(self, column):
-        """
-        Calcula os quartis (Q1, Q2 e Q3) de uma coluna.
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
+        dados = sorted(self.dataset[column])
+        n = len(dados)
 
-        Retorno
-        -------
-        dict
-            Um dicionário com os quartis Q1, Q2 (mediana) e Q3.
-        """
-        pass
+        # Reuso da mediana para o Q2
+        q2 = self.median(column)
+
+        # Função interna para calcular a posição (Interpolação)
+        def calcular_posicao(percentil):
+            # Localiza o índice (posição teorica)
+            indice = percentil * (n + 1)
+            idx_baixo = int(indice)
+            idx_alto = idx_baixo + 1
+
+            # Ajuste de limites para não sair da lista
+            if idx_baixo < 1: return dados[0]
+            if idx_baixo >= n: return dados[-1]
+
+            # Calcula o valor entre dois índices (Interpolação)
+            peso = indice - idx_baixo
+            return dados[idx_baixo - 1] + peso * (dados[idx_alto - 1] - dados[idx_baixo - 1])
+
+        return {
+            "Q1": calcular_posicao(0.25),
+            "Q2": q2,
+            "Q3": calcular_posicao(0.75)
+        }
+
 
     def histogram(self, column, bins):
-        """
-        Gera um histograma baseado em buckets (intervalos).
 
-        Parâmetros
-        ----------
-        column : str
-            O nome da coluna (chave do dicionário do dataset).
-        bins : int
-            Número de buckets (intervalos).
+        dados = self.dataset[column]
 
-        Retorno
-        -------
-        dict
-            Um dicionário onde as chaves são os intervalos (tuplas)
-            e os valores são as contagens.
-        """
-        pass
+        # Valida e anota os limites
+        min_val = min(dados)
+        max_val = max(dados)
 
+        # Se todos os valores forem iguais, teremos apenas 1 intervalo
+        if min_val == max_val:
+            return {(min_val, max_val): len(dados)}
+
+        # Cálculo da largura de cada intervalo (bin)
+        amplitude = max_val - min_val
+        largura_bin = amplitude / bins
+
+        # Criação dos intervalos e contagem
+        histograma = {}
+        intervalos = []
+
+        # Logica para os intervalos desejados
+        for i in range(bins):
+            inicio = min_val + (i * largura_bin)
+            fim = min_val + ((i + 1) * largura_bin)
+            intervalo = (inicio, fim)
+            intervalos.append(intervalo)
+            histograma[intervalo] = 0
+
+        # Distribuí os dados nos intervalos
+        for valor in dados:
+            # Se for o valor máximo, ele entra no último intervalo
+            if valor == max_val:
+                indice_bin = bins - 1
+            else:
+                indice_bin = int((valor - min_val) / largura_bin)
+
+            # Proteção contra erros de arredondamento
+            if indice_bin >= bins:
+                indice_bin = bins - 1
+
+            histograma[intervalos[indice_bin]] += 1
+
+        return histograma

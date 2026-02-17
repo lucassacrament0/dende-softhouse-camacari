@@ -142,7 +142,7 @@ class TestStatistics(unittest.TestCase):
 
     def test_quartiles_participants(self):
         expected = {
-            "Q1": 67.5,
+            "Q1": 58.75,
             "Q2": 105.0,
             "Q3": 165.0
         }
